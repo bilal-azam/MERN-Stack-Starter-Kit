@@ -1,1 +1,1 @@
-# MERN-Stack-Starter-Kit
+# MERN Stack Starter Kit
