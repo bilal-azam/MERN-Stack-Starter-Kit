@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const redis = require('redis');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const User = require('./models/User');
 
 const app = express();
@@ -34,6 +35,25 @@ app.post('/login', async (req, res) => {
   if (!user) return res.status(401).send('Invalid credentials');
   const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: '1h' });
   res.send({ token });
+});
+
+// Password reset endpoint
+app.post('/reset-password', async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).send('User not found');
+  
+  const transporter = nodemailer.createTransport({ /* SMTP config */ });
+  const resetToken = jwt.sign({ id: user._id }, 'reset-secret', { expiresIn: '1h' });
+  const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
+
+  await transporter.sendMail({
+    to: email,
+    subject: 'Password Reset',
+    html: `Click <a href="${resetUrl}">here</a> to reset your password.`,
+  });
+
+  res.send('Password reset email sent');
 });
 
 app.listen(5000, () => console.log('Server running on port 5000'));
