@@ -21,6 +21,17 @@ app.get('/cache', (req, res) => {
   });
 });
 
+app.get('/data', async (req, res) => {
+  const cacheKey = 'data';
+  redisClient.get(cacheKey, async (err, data) => {
+    if (data) return res.send(JSON.parse(data));
+
+    const freshData = await getDataFromDb(); // replace with actual data fetch logic
+    redisClient.setex(cacheKey, 3600, JSON.stringify(freshData));
+    res.send(freshData);
+  });
+});
+
 // Register endpoint
 app.post('/register', async (req, res) => {
   const user = new User(req.body);
