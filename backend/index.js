@@ -5,6 +5,8 @@ const redis = require('redis');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const User = require('./models/User');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const redisClient = redis.createClient();
@@ -13,6 +15,11 @@ mongoose.connect('mongodb://localhost:27017/myapp', { useNewUrlParser: true, use
 redisClient.on('error', (err) => console.log('Redis error: ', err));
 
 app.use(express.json());
+app.use(helmet());
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+}));
 
 app.get('/cache', (req, res) => {
   redisClient.get('key', (err, data) => {
