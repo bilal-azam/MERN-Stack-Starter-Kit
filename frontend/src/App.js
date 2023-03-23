@@ -1,6 +1,6 @@
 // frontend/src/App.js (update for code splitting)
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
@@ -11,10 +11,10 @@ function App() {
     <Router>
       <Header />
       <Suspense fallback={<div>Loading...</div>}>
-        <Switch>
+        <Routes>
           <Route path="/login" component={Login} />
           {/* Add other routes here */}
-        </Switch>
+        </Routes>
       </Suspense>
       <Footer />
     </Router>
