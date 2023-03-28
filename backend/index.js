@@ -7,6 +7,8 @@ const nodemailer = require('nodemailer');
 const User = require('./models/User');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const winston = require('winston');
+const { Loggly } = require('winston-loggly-bulk');
 
 const app = express();
 const redisClient = redis.createClient();
@@ -72,6 +74,23 @@ app.post('/reset-password', async (req, res) => {
   });
 
   res.send('Password reset email sent');
+});
+
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.Console(),
+    new Loggly({
+      token: "YOUR_LOGGLY_TOKEN",
+      subdomain: "YOUR_LOGGLY_SUBDOMAIN",
+      tags: ["Winston-Node"],
+      json: true,
+    })
+  ]
+});
+
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.url}`);
+  next();
 });
 
 app.listen(5000, () => console.log('Server running on port 5000'));
