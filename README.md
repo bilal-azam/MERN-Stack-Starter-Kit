@@ -1,15 +1,35 @@
 # MERN Stack Starter Kit
 
-This is a full-stack application using React, Redux Toolkit, Node.js, Express, MongoDB, and Redis.
+## Overview
 
-### Setup
+MyFullStackApp is a full-stack application using React, Redux Toolkit, Node.js, Express, MongoDB, and Redis.
 
-1. **Frontend**
+## Features
+
+- User authentication
+- Password reset functionality
+- Data caching with Redis
+- Responsive UI
+
+## Deployment
+
+The application is deployed as follows:
+
+- **Frontend:** Deployed on Netlify
+- **Backend:** Deployed on Heroku
+
+## Setup
+
+1. **Frontend:**
    - Navigate to `frontend/`
    - Run `npm install`
-   - Run `npm start`
+   - Run `npm start` to start the development server
 
-2. **Backend**
+2. **Backend:**
    - Navigate to `backend/`
    - Run `npm install`
-   - Run `node index.js`
+   - Run `node index.js` to start the server
+
+## License
+
+This project is licensed under the MIT License.
